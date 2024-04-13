@@ -13,14 +13,15 @@
             </el-form-item>
         </el-form>
 
-
-        <div style="text-align: right;margin-top: 10px">版本：1.0.1</div>
-        <div style="text-align: right;margin-top: 5px">项目地址：
-            <el-link type="primary" underline href="https://github.com/yannecer/tv-helper" target="_blank">
+        <div style="display: flex;align-items: center;margin-top: 40px;text-align: right">
+            <div style="flex: 1"></div>
+            <div>项目地址：</div>
+            <div style="color: dodgerblue;cursor: pointer" @click="goProject">
                 https://github.com/yannecer/tv-helper
-            </el-link>
+            </div>
         </div>
-        <div style="text-align: right;margin-top: 5px">作者： necer</div>
+        <div style="text-align: right;margin-top: 5px">作者：necer</div>
+        <div style="text-align: right;margin-top: 5px">版本：1.0.1</div>
 
         <div slot="footer" style="text-align: right;margin-top: 40px">
             <el-button size="small" @click="cancel">取 消</el-button>
@@ -34,7 +35,7 @@
 
 
 const constants = require('../utils/constants')
-
+const {shell} = require('electron')
 export default {
 
 
@@ -43,7 +44,8 @@ export default {
             config: {
                 adbPath: "",
                 adbConnect: "",
-                adbInstall: ""
+                adbInstall: "",
+                ipAddress: ""
             },
         }
     },
@@ -62,7 +64,11 @@ export default {
         },
         sure() {
             this.$emit("onSureDialog", this.config);
-        }
+        },
+        goProject() {
+            const url = "https://github.com/yannecer/tv-helper"
+            require('electron').shell.openExternal(url)
+        },
     }
 }
 </script>

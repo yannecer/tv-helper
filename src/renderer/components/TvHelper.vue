@@ -12,7 +12,7 @@
         <div style="display: flex;align-items: center;margin-top: 100px">
             <div style="color: #666;width: 250px;text-align: right">电视IP地址:</div>
             <el-input size="small" @input="inputChange" style="margin-left: 20px" placeholder="请输入电视IP地址"
-                      v-model="ipAddress" clearable></el-input>
+                      v-model="config.ipAddress" clearable></el-input>
             <el-popover
                 placement="top-start"
                 style="cursor: pointer"
@@ -67,7 +67,6 @@
 
 <script>
 import ConfigDialog from "./ConfigDialog.vue";
-
 const fs = require('fs');
 const unZipper = require('unzipper');
 const path = require('path');
@@ -85,7 +84,6 @@ export default {
     components: {ConfigDialog},
     data() {
         return {
-            ipAddress: "",
             initSuccess: false,
             dialogConfigVisible: false,
             dialogErrorVisible: false,
@@ -93,20 +91,20 @@ export default {
             apkPath: "",
             installStatus: -1,//0-正在安装，1-安装成功，2-安装失败
             connectStatus: -1,//0-正在连接，1-连接成功，2-连接失败
-
             config: {},
         }
     },
 
     created() {
-        localStorage.setItem(constants.ADB_CONFIG, "")
+
         let configJson = localStorage.getItem(constants.ADB_CONFIG)
 
         if (!configJson) {
             let config = {
                 adbPath: "C:\\AdbTemp",
                 adbConnect: "adb connect",
-                adbInstall: "adb install -r"
+                adbInstall: "adb install -r",
+                ipAddress: "",
             }
             localStorage.setItem(constants.ADB_CONFIG, JSON.stringify(config))
         }
@@ -120,6 +118,7 @@ export default {
         initAdb() {
             let that = this
             let configJson = localStorage.getItem(constants.ADB_CONFIG)
+
             if (!configJson) {
                 that.$message.error("配置出错")
                 return
@@ -154,11 +153,10 @@ export default {
         },
 
         inputChange(value) {
-            this.ipAddress = value.replace(/[^0-9:]*/g, '');
+            this.config.ipAddress = value.replace(/[^0-9:\.]/g, '')
         },
 
         chooseFile() {
-
             if (this.connectStatus !== 1) {
                 this.$message.error("请先连接电视")
                 return
@@ -182,11 +180,10 @@ export default {
             this.dialogConfigVisible = false
         },
         onSureDialog(e) {
-            localStorage.setItem(consta, JSON.stringify(e))
+            localStorage.setItem(constants.ADB_CONFIG, JSON.stringify(e))
             this.dialogConfigVisible = false
             this.initAdb();
         },
-
 
         connect() {
             if (!this.initSuccess) {
@@ -194,15 +191,17 @@ export default {
                 return
             }
 
-            if (!this.ipAddress) {
+            if (!this.config.ipAddress) {
                 this.$message.error("请输入电视IP地址")
                 return;
             }
 
+            localStorage.setItem(constants.ADB_CONFIG, JSON.stringify(this.config))
+
             this.connectStatus = 0
             this.cmdLogArr = []
 
-            const cmdStr = this.config.adbConnect + " " + this.ipAddress
+            const cmdStr = this.config.adbConnect + " " + this.config.ipAddress
 
             utils.execCmd(this.config.adbPath, cmdStr, () => {
                 this.$message.success("连接成功")
@@ -224,7 +223,7 @@ export default {
             this.cmdLogArr = []
 
             this.installStatus = 0;
-            const cmdStr = this.config.adbConnect + " " + this.ipAddress + " && " + this.config.adbInstall + " " + this.apkPath
+            const cmdStr = this.config.adbConnect + " " + this.config.ipAddress + " && " + this.config.adbInstall + " " + this.apkPath
 
             utils.execCmd(this.config.adbPath, cmdStr, (logArr) => {
                 this.$message.success("安装成功")
