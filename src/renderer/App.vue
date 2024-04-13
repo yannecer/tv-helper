@@ -7,7 +7,6 @@
 <script>
 
 import TvHelper from "./components/TvHelper.vue";
-import {app} from 'electron'
 export default {
 
     components: {

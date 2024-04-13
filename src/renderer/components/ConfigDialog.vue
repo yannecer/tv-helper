@@ -14,10 +14,15 @@
         </el-form>
 
 
-        <div>版本：1.0.1</div>
-        <div>项目地址：</div>
+        <div style="text-align: right;margin-top: 10px">版本：1.0.1</div>
+        <div style="text-align: right;margin-top: 5px">项目地址：
+            <el-link type="primary" underline href="https://github.com/yannecer/tv-helper" target="_blank">
+                https://github.com/yannecer/tv-helper
+            </el-link>
+        </div>
+        <div style="text-align: right;margin-top: 5px">作者： necer</div>
 
-        <div slot="footer" style="text-align: right">
+        <div slot="footer" style="text-align: right;margin-top: 40px">
             <el-button size="small" @click="cancel">取 消</el-button>
             <el-button size="small" type="primary" @click="sure">确 定</el-button>
         </div>
