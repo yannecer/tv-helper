@@ -12,7 +12,7 @@
 
 本项目只支持了```Windows```版本，如需其他系统的版本，请自行替换项目中的```/static/adb.zip```为对应平台版本，并重新打包成相应平台的安装包
 
-### [下载Windows版本](https://github.com/yannecer/tv-helper/blob/master/public/%E7%94%B5%E8%A7%86%E5%8A%A9%E6%89%8B%20Setup%201.0.1.exe)
+### [下载Windows版本](https://github.com/yannecer/tv-helper/releases/download/1.0.1/Setup.1.0.1.exe)
 
 #### Build Setup
 
